@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - Delete Ads</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 25px;
+    }
+
+    .ads {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .ad {
+      background: white;
+      width: 90%;
+      max-width: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .ad img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      margin-right: 10px;
+    }
+
+    .ad-info {
+      flex-grow: 1;
+      text-align: left;
+    }
+
+    button {
+      padding: 5px 10px;
+      border-radius: 8px;
+      border: none;
+      background: #ff4d4d;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #cc0000;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Admin - Delete Ads</h1>
+  <div class="ads"></div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const supabaseUrl = 'https://uczcdcsxyfihpqpwbsgn.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjemNkY3N4eWZpaHBxcHdic2duIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0NTgwOTksImV4cCI6MjA4NDAzNDA5OX0.YHHOgefy2Fr6cAlmyyLKvmYgeugILKwjPInVRgG2RYU'
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    const container = document.querySelector('.ads')
+
+    function createAdDiv(ad) {
+      const div = document.createElement('div')
+      div.className = 'ad'
+      div.innerHTML = `
+        <div class="ad-info">
+          <img src="${ad.image}" alt="${ad.title}">
+          <strong>${ad.title}</strong> <br>
+          <a href="${ad.url}" target="_blank">${ad.url}</a>
+        </div>
+        <button data-id="${ad.id}">Delete</button>
+      `
+      const btn = div.querySelector('button')
+      btn.addEventListener('click', async () => {
+        if (confirm(`Delete "${ad.title}"?`)) {
+          const { error } = await supabase
+            .from('ads')
+            .delete()
+            .eq('id', ad.id)
+
+          if (error) {
+            alert('Error deleting ad: ' + error.message)
+          } else {
+            div.remove()
+          }
+        }
+      })
+      return div
+    }
+
+    async function loadAds() {
+      const { data: ads, error } = await supabase
+        .from('ads')
+        .select('*')
+
+      if (error) {
+        console.error(error)
+        return
+      }
+
+      container.innerHTML = ''
+
+      // Roblox ad is NOT deletable
+      container.appendChild(createAdDiv({
+        id: 0,
+        title: 'Roblox',
+        image: 'https://logos-world.net/wp-content/uploads/2020/10/Roblox-Icons-Logo-2011-2015.png',
+        url: 'https://www.roblox.com'
+      }))
+
+      ads.forEach(ad => {
+        container.appendChild(createAdDiv(ad))
+      })
+    }
+
+    loadAds()
+  </script>
+
+</body>
+</html>
