@@ -86,7 +86,6 @@
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-    // REPLACE WITH YOUR SUPABASE INFO
     const supabaseUrl = 'https://uczcdcsxyfihpqpwbsgn.supabase.co'
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjemNkY3N4eWZpaHBxcHdic2duIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0NTgwOTksImV4cCI6MjA4NDAzNDA5OX0.YHHOgefy2Fr6cAlmyyLKvmYgeugILKwjPInVRgG2RYU'
     const supabase = createClient(supabaseUrl, supabaseKey)
@@ -107,14 +106,7 @@
 
       const { error } = await supabase
         .from('ads')
-        .insert([
-          {
-            title,
-            image,
-            url,
-            approved: true
-          }
-        ])
+        .insert([{ title, image, url, approved: true }])
 
       if (error) {
         alert('Error submitting ad: ' + error.message)
