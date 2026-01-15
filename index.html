@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Our Ads</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -62,12 +61,6 @@
       color: #ffcc00;
     }
 
-    .footer {
-      margin-top: 30px;
-      color: #777;
-      font-size: 14px;
-    }
-
     @media (max-width: 600px) {
       .ad {
         width: 90%;
@@ -78,65 +71,58 @@
 <body>
 
   <h1>Our Ads</h1>
-  <div class="ads"></div>
-  <div class="footer">Updated: 2026-01-15</div>
+  <div class="ads" id="ads-container">
+    <!-- Ads will appear here -->
+  </div>
 
   <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-    const supabaseUrl = 'https://uczcdcsxyfihpqpwbsgn.supabase.co'
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjemNkY3N4eWZpaHBxcHdic2duIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0NTgwOTksImV4cCI6MjA4NDAzNDA5OX0.YHHOgefy2Fr6cAlmyyLKvmYgeugILKwjPInVRgG2RYU'
-    const supabase = createClient(supabaseUrl, supabaseKey)
+    // Supabase project info
+    const supabaseUrl = 'https://uczcdcsxyfihpqpwbsgn.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjemNkY3N4eWZpaHBxcHdic2duIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0NTgwOTksImV4cCI6MjA4NDAzNDA5OX0.YHHOgefy2Fr6cAlmyyLKvmYgeugILKwjPInVRgG2RYU';
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const container = document.querySelector('.ads')
+    const container = document.getElementById('ads-container');
 
     function createAdDiv(ad) {
-      const div = document.createElement('div')
-      div.className = 'ad'
+      const div = document.createElement('div');
+      div.className = 'ad';
       div.innerHTML = `
         <a href="${ad.url}" target="_blank" rel="noopener">
           <img src="${ad.image}" alt="${ad.title}">
           ${ad.title}
         </a>
-      `
-      return div
+      `;
+      return div;
     }
 
     async function loadAds() {
+      container.innerHTML = '';
+
+      // Load ads from Supabase
       const { data: ads, error } = await supabase
         .from('ads')
         .select('*')
-        .eq('approved', true)
+        .eq('approved', true); // only show approved ads
 
       if (error) {
-        console.error(error)
-        return
+        console.error('Error loading ads:', error);
+        container.innerHTML = '<p>Failed to load ads.</p>';
+        return;
       }
 
-      container.innerHTML = ''
+      if (ads.length === 0) {
+        container.innerHTML = '<p>No ads available.</p>';
+        return;
+      }
 
-      // Preloaded Roblox ad
-      container.appendChild(createAdDiv({
-        title: 'Roblox',
-        image: 'https://logos-world.net/wp-content/uploads/2020/10/Roblox-Icons-Logo-2011-2015.png',
-        url: 'https://www.roblox.com'
-      }))
-
-      ads.forEach(ad => container.appendChild(createAdDiv(ad)))
+      ads.forEach(ad => {
+        container.appendChild(createAdDiv(ad));
+      });
     }
 
-    loadAds()
-
-    // Live updates
-    supabase
-      .channel('public:ads')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'ads' }, payload => {
-        const newAd = payload.new
-        if (newAd.approved) {
-          container.appendChild(createAdDiv(newAd))
-        }
-      })
-      .subscribe()
+    loadAds();
   </script>
 
 </body>
