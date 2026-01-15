@@ -15,7 +15,7 @@
     }
 
     h1 {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
     .ads {
@@ -28,20 +28,75 @@
     .ad {
       background: white;
       width: 300px;
-      border-radius: 10px;
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      transition: transform 0.2s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease;
     }
 
     .ad:hover {
       transform: scale(1.03);
     }
 
-    /* ✅ IMAGE FI*
-<div class="ad">
-  <a href="https://roblox.com" target="_blank">
-    <img src="https://logos-world.net/wp-content/uploads/2020/10/Roblox-Icons-Logo-2011-2015.png">
-    Ad Title Here
-  </a>
-</div>
+    /* ✅ IMAGE SIZE FIX */
+    .ad img {
+      width: 100%;
+      max-height: 250px;
+      object-fit: contain;   /* shows full image */
+      background: #ffffff;
+      display: block;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .ad a {
+      display: block;
+      text-decoration: none;
+      color: #000;
+      font-weight: bold;
+      padding: 10px;
+    }
+
+    .ad a:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      margin-top: 30px;
+      color: #777;
+      font-size: 14px;
+    }
+
+    /* 📱 Mobile friendly */
+    @media (max-width: 600px) {
+      .ad {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Our Ads</h1>
+
+  <div class="ads">
+
+    <!-- ROBLOX AD -->
+    <div class="ad">
+      <a href="https://www.roblox.com" target="_blank" rel="noopener">
+        <img
+          src="https://logos-world.net/wp-content/uploads/2020/10/Roblox-Icons-Logo-2011-2015.png"
+          alt="Roblox"
+        >
+        Roblox
+      </a>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Updated: 2026-01-15
+  </div>
+
+</body>
+</html>
