@@ -8,8 +8,8 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f5f5f5; /* Light background */
-      color: #333;         /* Dark text */
+      background: #f5f5f5;
+      color: #333;
       margin: 0;
       padding: 20px;
       text-align: center;
@@ -43,7 +43,7 @@
     .ad img {
       width: 100%;
       max-height: 250px;
-      object-fit: contain;  /* Show full image */
+      object-fit: contain;
       background: white;
       display: block;
       padding: 10px;
@@ -84,9 +84,9 @@
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-    // Replace with your Supabase project info
-    const supabaseUrl = 'https://uczcdcsxyfihpqpwbsgn.supabase.co'
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjemNkY3N4eWZpaHBxcHdic2duIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0NTgwOTksImV4cCI6MjA4NDAzNDA5OX0.YHHOgefy2Fr6cAlmyyLKvmYgeugILKwjPInVRgG2RYU'
+    // REPLACE THESE WITH YOUR SUPABASE INFO
+    const supabaseUrl = 'YOUR_SUPABASE_URL'
+    const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'
     const supabase = createClient(supabaseUrl, supabaseKey)
 
     async function loadAds() {
