@@ -73,6 +73,7 @@
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
+    // Your Supabase project
     const supabaseUrl = 'https://uczcdcsxyfihpqpwbsgn.supabase.co'
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjemNkY3N4eWZpaHBxcHdic2duIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0NTgwOTksImV4cCI6MjA4NDAzNDA5OX0.YHHOgefy2Fr6cAlmyyLKvmYgeugILKwjPInVRgG2RYU'
     const supabase = createClient(supabaseUrl, supabaseKey)
@@ -88,23 +89,25 @@
           <strong>${ad.title}</strong> <br>
           <a href="${ad.url}" target="_blank">${ad.url}</a>
         </div>
-        <button data-id="${ad.id}">Delete</button>
+        <button data-id="${ad.id}" ${ad.title === "Roblox" ? "disabled style='opacity:0.5;cursor:default'" : ""}>Delete</button>
       `
       const btn = div.querySelector('button')
-      btn.addEventListener('click', async () => {
-        if (confirm(`Delete "${ad.title}"?`)) {
-          const { error } = await supabase
-            .from('ads')
-            .delete()
-            .eq('id', ad.id)
+      if (!btn.disabled) {
+        btn.addEventListener('click', async () => {
+          if (confirm(`Delete "${ad.title}"?`)) {
+            const { error } = await supabase
+              .from('ads')
+              .delete()
+              .eq('id', ad.id)
 
-          if (error) {
-            alert('Error deleting ad: ' + error.message)
-          } else {
-            div.remove()
+            if (error) {
+              alert('Error deleting ad: ' + error.message)
+            } else {
+              div.remove()
+            }
           }
-        }
-      })
+        })
+      }
       return div
     }
 
@@ -120,7 +123,7 @@
 
       container.innerHTML = ''
 
-      // Roblox ad is NOT deletable
+      // Roblox ad is preloaded and not deletable
       container.appendChild(createAdDiv({
         id: 0,
         title: 'Roblox',
@@ -128,9 +131,7 @@
         url: 'https://www.roblox.com'
       }))
 
-      ads.forEach(ad => {
-        container.appendChild(createAdDiv(ad))
-      })
+      ads.forEach(ad => container.appendChild(createAdDiv(ad)))
     }
 
     loadAds()
