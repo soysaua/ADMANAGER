@@ -26,6 +26,7 @@ input, button { width: 100%; padding: 10px; margin: 8px 0; font-size: 16px; }
 <p id="status"></p>
 
 <script>
+// Your Google Sheet Web App URL
 const SHEET_API = 'https://script.google.com/a/macros/education.nsw.gov.au/s/AKfycbwN9dWiHmlNSu5ZS1ixaL81W6BVIcwbxKHJrE-OR9k9JvFmZyRPyAfaTZ7tUMP5ZbY/exec';
 
 document.getElementById('adForm').addEventListener('submit', function(e){
@@ -36,7 +37,10 @@ document.getElementById('adForm').addEventListener('submit', function(e){
   const url = `${SHEET_API}?title=${encodeURIComponent(data.get('title'))}&image=${encodeURIComponent(data.get('image'))}&url=${encodeURIComponent(data.get('url'))}`;
 
   fetch(url)
-    .then(() => document.getElementById('status').textContent = "✅ Ad submitted successfully!")
+    .then(() => {
+      document.getElementById('status').textContent = "✅ Ad submitted successfully!";
+      this.reset(); // Clear form
+    })
     .catch(() => document.getElementById('status').textContent = "❌ Error submitting ad. Try again.");
 });
 </script>
