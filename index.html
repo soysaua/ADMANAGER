@@ -1,41 +1,6 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Our Ads</title>
-<style>
-body { font-family: Arial, sans-serif; padding: 20px; }
-#ad-container { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
-#ad-container div { border: 1px solid #ccc; padding: 5px; width: 300px; text-align: center; }
-#ad-container img { max-width: 100%; height: auto; }
-</style>
-</head>
-<body>
-
-<h1>Our Ads</h1>
-<div id="ad-container"></div>
-
-<script>
-// Your Google Sheet Web App URL
-const SHEET_API = 'https://script.google.com/a/macros/education.nsw.gov.au/s/AKfycbwN9dWiHmlNSu5ZS1ixaL81W6BVIcwbxKHJrE-OR9k9JvFmZyRPyAfaTZ7tUMP5ZbY/exec';
-const container = document.getElementById('ad-container');
-
-fetch(SHEET_API)
-  .then(res => res.json())
-  .then(ads => {
-    ads.forEach(ad => {
-      const div = document.createElement('div');
-      div.innerHTML = `
-        <a href="${ad.url}" target="_blank">
-          <img src="${ad.image}" alt="${ad.title}">
-        </a>
-        <p>${ad.title}</p>
-      `;
-      container.appendChild(div);
-    });
-  })
-  .catch(err => container.innerHTML = "<p>❌ Failed to load ads.</p>");
-</script>
-
-</body>
-</html>
+<div class="ad">
+  <a href="roblox.com" target="_blank">
+    <img src="https://logos-world.net/wp-content/uploads/2020/10/Roblox-Icons-Logo-2011-2015.png">
+    roblox
+  </a>
+</div>
