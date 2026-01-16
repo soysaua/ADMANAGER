@@ -1,151 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>UNBLOX</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
+  <meta charset="UTF-8">
+  <title>Our Ads</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: #ffffff;
-      color: #000;
-    }
-
-    /* Layout */
-    .container {
-      display: flex;
-      width: 100%;
-      min-height: 100vh;
-    }
-
-    /* Google Site iframe */
-    .site-wrapper {
-      flex: 3;
-      border-right: 1px solid #ddd;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100vh;
-      border: none;
-    }
-
-    /* Ads */
-    .ads-wrapper {
-      flex: 1;
-      padding: 16px;
-      overflow-y: auto;
-      background: #f9f9f9;
-    }
-
-    .ads-wrapper h2 {
-      margin-top: 0;
-      font-size: 18px;
+      background: #f5f5f5;
+      color: #333;
+      margin: 0;
+      padding: 20px;
       text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 25px;
+    }
+
+    .ads {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
     }
 
     .ad {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 12px;
-      background: #fff;
-      text-align: center;
+      background: white;
+      width: 300px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .ad:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
     }
 
     .ad img {
-      max-width: 100%;
-      max-height: 120px;
+      width: 100%;
+      max-height: 250px;
       object-fit: contain;
+      background: white;
       display: block;
-      margin: 0 auto 6px;
+      padding: 10px;
+      box-sizing: border-box;
     }
 
     .ad a {
+      display: block;
       text-decoration: none;
-      color: #000;
+      color: #333;
       font-weight: bold;
+      padding: 10px;
     }
 
-    /* Mobile */
-    @media (max-width: 900px) {
-      .container {
-        flex-direction: column;
-      }
+    .ad a:hover {
+      color: #ffcc00;
+    }
 
-      iframe {
-        height: 60vh;
-      }
-
-      .ads-wrapper {
-        height: auto;
+    @media (max-width: 600px) {
+      .ad {
+        width: 90%;
       }
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-
-  <!-- GOOGLE SITE -->
-  <div class="site-wrapper">
-    <iframe
-      src="https://sites.google.com/education.nsw.gov.au/unblox-the-unblocked"
-      loading="lazy">
-    </iframe>
+  <h1>Our Ads</h1>
+  <div class="ads" id="ads-container">
+    <!-- Ads will appear here -->
   </div>
 
-  <!-- ADS -->
-  <div class="ads-wrapper">
-    <h2>Sponsored</h2>
-    <div id="ads"></div>
-  </div>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-</div>
+    // Supabase project info
+    const supabaseUrl = 'https://uczcdcsxyfihpqpwbsgn.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjemNkY3N4eWZpaHBxcHdic2duIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0NTgwOTksImV4cCI6MjA4NDAzNDA5OX0.YHHOgefy2Fr6cAlmyyLKvmYgeugILKwjPInVRgG2RYU';
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-<!-- SUPABASE ADS SCRIPT -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const supabaseUrl = "https://uczcdcsxyfihpqpwbsgn.supabase.co";
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVjemNkY3N4eWZpaHBxcHdic2duIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0NTgwOTksImV4cCI6MjA4NDAzNDA5OX0.YHHOgefy2Fr6cAlmyyLKvmYgeugILKwjPInVRgG2RYU";
-  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    const container = document.getElementById('ads-container');
 
-  async function loadAds() {
-    const { data, error } = await supabase
-      .from("ads")
-      .select("*")
-      .eq("approved", true)
-      .order("id", { ascending: false });
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    const container = document.getElementById("ads");
-    container.innerHTML = "";
-
-    data.forEach(ad => {
-      const div = document.createElement("div");
-      div.className = "ad";
+    function createAdDiv(ad) {
+      const div = document.createElement('div');
+      div.className = 'ad';
       div.innerHTML = `
-        <a href="${ad.link}" target="_blank">
-          <img src="${ad.image}" alt="Ad">
+        <a href="${ad.url}" target="_blank" rel="noopener">
+          <img src="${ad.image}" alt="${ad.title}">
           ${ad.title}
         </a>
       `;
-      container.appendChild(div);
-    });
-  }
+      return div;
+    }
 
-  loadAds();
-</script>
+    async function loadAds() {
+      container.innerHTML = '';
+
+      // Load ads from Supabase
+      const { data: ads, error } = await supabase
+        .from('ads')
+        .select('*')
+        .eq('approved', true); // only show approved ads
+
+      if (error) {
+        console.error('Error loading ads:', error);
+        container.innerHTML = '<p>Failed to load ads.</p>';
+        return;
+      }
+
+      if (ads.length === 0) {
+        container.innerHTML = '<p>No ads available.</p>';
+        return;
+      }
+
+      ads.forEach(ad => {
+        container.appendChild(createAdDiv(ad));
+      });
+    }
+
+    loadAds();
+  </script>
 
 </body>
 </html>
